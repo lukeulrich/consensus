@@ -1,0 +1,82 @@
+<!doctype html>
+<html ng-app="consensus">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Consensus</title>
+    <meta name="description" content="Javascript adaption of Nigel Brown's consensus script">
+
+    <link rel="stylesheet" href="consensus.css">
+</head>
+<body ng-cloak ng-controller="ConsensusCtrl">
+
+<section id="input">
+
+<h1>Consensus</h1>
+<p>This tool is a pure JavaScript adaptation of Nigel Brown's consensus script.</p>
+
+<h3>Instructions</h3>
+<ol>
+    <li>Input your amino acid sequence alignment (CLUSTAL format only)</li>
+    <li>Select the desired consensus thresholds</li>
+    <li>Press the Consensus button</li>
+</ol>
+
+<form name="form" ng-submit="process()">
+    <label for="rawMsa">CLUSTAL alignment</label>
+    <textarea ng-model="data.rawMsa"
+        autofocus
+        name="rawMsa"
+        rows="15"
+        style="width: 100%; max-width: 800px;"
+        required></textarea>
+    <p ng-if="error" class="error"><strong>Oops!</strong> {{ error }}</p>
+
+    <label for="thresholds">Thresholds</label>
+    <checkbox-group ng-model="data.thresholds"
+        option-string="data.thresholdOptions"></checkbox-group>
+    <br>
+
+    <label><a href="" ng-click="groupsVisible = !groupsVisible"><span ng-if="!groupsVisible">Edit</span><span ng-if="groupsVisible">Hide</span> Amino acid groups</a><span ng-if="groupsVisible"> (<a href="" ng-click="resetGroups()">Reset</a>)</span></label>
+    <table id="groups" ng-show="groupsVisible">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Residues</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="group in groups track by $index">
+                <td><input type="text" ng-model="group.name"></td>
+                <td><input type="text" ng-model="group.symbol"></td>
+                <td><input type="text" ng-model="group.members"></td>
+                <td><button type="button" ng-click="removeGroup($index)" title="Delete group">&times;</button></td>
+            </tr>
+            <tr>
+                <td colspan="3"><button type="button" ng-click="addGroup()">New group</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="submit" ng-disabled="form.$invalid">Consensus</button>
+</form>
+
+</section>
+
+<section id="results" ng-if="results">
+    <br>
+    <hr>
+    <h3>Results</h3>
+    <pre>{{ results }}</pre>
+</section>
+
+<footer>
+    <p>&copy <script>document.write((new Date()).getFullYear())</script> Ulritech, LLC</p>
+</footer>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.17/angular.min.js"></script>
+<script src="consensus.js"></script>
+</body>
+</html>

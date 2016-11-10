@@ -1,0 +1,9 @@
+<div class="checkbox-group">
+    <label ng-repeat="option in options track by $index"
+        ng-required="agRequired"
+        class="checkbox-inline">
+        <input type="checkbox"
+            ng-checked="selected[$index]"
+            ng-click="toggle($index, option)"> {{ option }}
+    </label>
+</div>
